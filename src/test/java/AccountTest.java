@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AccountTest {
 
@@ -55,6 +56,25 @@ public class AccountTest {
 
         assertEquals(expected, account.printStatement());
     }
+
+
+    @Test
+    void shouldThrowExceptionWhenDepositAmountIsInvalid() {
+        Account account = new Account(fixedClock(2026, 5, 13));
+
+        assertThrows(IllegalArgumentException.class, () -> account.deposit(0));
+        assertThrows(IllegalArgumentException.class, () -> account.deposit(-10));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenWithdrawAmountIsInvalid() {
+        Account account = new Account(fixedClock(2026, 5, 13));
+
+        assertThrows(IllegalArgumentException.class, () -> account.withdraw(0));
+        assertThrows(IllegalArgumentException.class, () -> account.withdraw(-10));
+    }
+
+
 
 
     private Clock fixedClock(int year, int month, int day) {

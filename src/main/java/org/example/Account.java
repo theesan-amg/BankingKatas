@@ -20,11 +20,19 @@ public class Account {
     }
 
     public void deposit(int amount) {
+        validatePositiveAmount(amount, "Deposit");
         transactions.add(new Transaction(LocalDate.now(clock), amount));
     }
 
     public void withdraw(int amount) {
+        validatePositiveAmount(amount, "Withdraw");
         transactions.add(new Transaction(LocalDate.now(clock), -amount));
+    }
+
+    private void validatePositiveAmount(int amount, String operation) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException(operation + " amount must be positive");
+        }
     }
 
     public String printStatement() {
