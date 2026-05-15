@@ -36,9 +36,20 @@ public class Account {
     }
 
     public String printStatement() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format(HEADER_FORMAT, "Date", "Amount", "Balance"));
+        StringBuilder statement = new StringBuilder();
+        appendHeader(statement);
 
+        List<StatementLine> lines = buildStatementLines();
+        appendLinesInReverseOrder(statement, lines);
+
+        return statement.toString();
+    }
+
+    private void appendHeader(StringBuilder statement) {
+        statement.append(String.format(HEADER_FORMAT, "Date", "Amount", "Balance"));
+    }
+
+    private List<StatementLine> buildStatementLines() {
         List<StatementLine> lines = new ArrayList<>();
         int balance = 0;
 
@@ -47,17 +58,19 @@ public class Account {
             lines.add(new StatementLine(transaction.date(), transaction.amount(), balance));
         }
 
+        return lines;
+    }
+
+    private void appendLinesInReverseOrder(StringBuilder statement, List<StatementLine> lines) {
         for (int i = lines.size() - 1; i >= 0; i--) {
             StatementLine line = lines.get(i);
-            sb.append(String.format(
+            statement.append(String.format(
                     LINE_FORMAT,
                     line.date().format(formatter),
                     line.amount(),
                     line.balance()
             ));
         }
-
-        return sb.toString();
     }
 
     private record StatementLine(LocalDate date, int amount, int balance) {}

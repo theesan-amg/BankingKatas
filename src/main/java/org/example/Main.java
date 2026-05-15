@@ -7,7 +7,7 @@ public class Main {
         Account account = new Account(Clock.systemDefaultZone());
 
         account.deposit(700);
-        account.withdraw(400);
+        account.withdraw(200);
 
         System.out.println(account.printStatement());
     }
