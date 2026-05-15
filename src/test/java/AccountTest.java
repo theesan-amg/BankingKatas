@@ -24,6 +24,20 @@ public class AccountTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void shouldPrintStatementWithOneDeposit() {
+        Account account = new Account(fixedClock(2026, 5, 13));
+
+        account.deposit(500);
+
+        String expected =
+                String.format("%-12s %8s %8s%n", "Date", "Amount", "Balance") +
+                        String.format("%-12s %+8d %8d%n", "13.05.2026", 500, 500);
+
+        assertEquals(expected, account.printStatement());
+    }
+
+
     private Clock fixedClock(int year, int month, int day) {
         return Clock.fixed(
                 LocalDate.of(year, month, day).atStartOfDay(ZoneId.systemDefault()).toInstant(),
