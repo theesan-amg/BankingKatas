@@ -31,17 +31,27 @@ public class Account {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(HEADER_FORMAT, "Date", "Amount", "Balance"));
 
+        List<StatementLine> lines = new ArrayList<>();
         int balance = 0;
+
         for (Transaction transaction : transactions) {
             balance += transaction.amount();
+            lines.add(new StatementLine(transaction.date(), transaction.amount(), balance));
+        }
+
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            StatementLine line = lines.get(i);
             sb.append(String.format(
                     LINE_FORMAT,
-                    transaction.date().format(formatter),
-                    transaction.amount(),
-                    balance
+                    line.date().format(formatter),
+                    line.amount(),
+                    line.balance()
             ));
         }
 
         return sb.toString();
     }
+
+    private record StatementLine(LocalDate date, int amount, int balance) {}
+
 }
